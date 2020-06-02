@@ -1,41 +1,71 @@
-let money = +prompt('Ваш бюджет на месяц?',''),
-    time = prompt('Введите дату в формате YYYY-MM-DD?','');
+'use strict';
 
-let appData = {
-    budget: money,
-    timeData: time,
-    expenses: {},
-    optionalExpenses: {},
-    income: [],
-    savings: false
+let numberOfFilms;
+function start(){
+    numberOfFilms = +prompt('Сколько фильмов Вы уже посмотрели?', '');
 
+    while(numberOfFilms == '' || numberOfFilms == null || isNaN(numberOfFilms)){
+        numberOfFilms = +prompt('Сколько фильмов Вы уже посмотрели?', '');
+    }
+}
+
+start(); 
+
+const personalMovieDB = {
+    count: numberOfFilms,
+    movies: {},
+    actors: {},
+    genres: [],
+    privat: false
 };
 
+function rememberMyFilms(){
+    for (let i =0; i < 2; i++) {
+        const a = prompt('Один из последних просмотренных фильмов?', ''),
+              b = prompt('На сколько оцените его?');
+    
+        if (a != null && b != null && a != '' && b != '' && a.length < 50) {
+            personalMovieDB.movies[a] = b;
+            console.log('Done!');
+    
+        } else {
+            console.log('Errore');
+            i--;
+    
+        }
+    }
+}
 
-    for ( let i = 0; i < 2; i++){
-        let a = prompt('Введите обязательную статью расходов в этом месяце'),
-            b = prompt('Во сколько обойдется?');
-        if ((typeof(a)) === 'string' && (typeof(a)) != null && (typeof(b)) != null && a != '' && b != '' && a.length < 50){
-            console.log("Done!");
-            appData.expenses[a] = b;
-        }
-        else{
-            i= i - 1;
-        }
+rememberMyFilms();
+
+function detectPersonalLevel(){
+    if (personalMovieDB.count < 10){
+        console.log('Просмотрено довольно мало фильмов');
+    } else if(personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+        console.log('Вы классический зритель');
+    } else if(personalMovieDB.count > 30) {
+        console.log('Вы киноман');
+    } else {
+        console.log('Произошла ошибка');
+    }
+}
+detectPersonalLevel();
+
+
+function showMyDB(hidden){
+    if (!hidden) {
+        console.log(personalMovieDB);
+    }
+}
+
+showMyDB(personalMovieDB.privat);
+
+
+function writeYourGenres(){
+    for (let i = 1; i <= 3; i++){
+            personalMovieDB.genres[i-1] = prompt(`Ваш любимый жанр под номером ${i}`);
         
     }
+}
+writeYourGenres();
 
-    appData.moneyPerDay = appData.budget / 30;
-    
-    
-    alert('Ежедневный бюджет' + appData.moneyPerDay);
-
-    if(appData.moneyPerDay < 100){
-        console.log("Минимальный уровень достатка");
-    } else if(appData.moneyPerDay > 100 && appData.moneyPerDay < 2000){
-        console.log("Средний уровень достатка");
-    } else if(appData.moneyPerDay > 2000){
-        console.log("Высокий уровень достатка");
-    } else{
-        console.log("Произошла ошибка!");
-    }
